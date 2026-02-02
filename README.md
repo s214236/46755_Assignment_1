@@ -2,6 +2,9 @@
 Repo for assignment 1 for group 32
 
 ## TODO
+### Peter
+
+
 ### Gustav
 1. Udfyld navn og email i pyproject.toml, commit herefter til din egen branch og merge til main efter.
 
