@@ -3,11 +3,14 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "template_repo"
+name = "46755_Assignment_1"
 version = "0.1.0"
-description = "template_repo"
+description = "Repo for assignment 1 in the course 46755 for group 32"
 authors = [
-  { name = "Peter Mads Pedersen", email = "petermads123@hotmail.com" }
+  { name = "Peter Mads Pedersen", email = "s214236@dtu.dk" },
+  { name = "Enter name here (Gustav)", email = "enter email here" },
+  { name = "Enter name here (Andreas)", email = "enter email here" },
+  { name = "Enter name here (Marte)", email = "enter email here" },
 ]
 readme = "README.md"
 requires-python = ">=3.13"
@@ -16,6 +19,7 @@ requires-python = ">=3.13"
 dependencies = [
   "numpy",
   "pandas",
+  "gurobipy",
 ]
 
 # Optional groups (e.g. dev dependencies)
