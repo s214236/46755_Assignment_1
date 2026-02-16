@@ -8,9 +8,6 @@ version = "0.1.0"
 description = "Repo for assignment 1 in the course 46755 for group 32"
 authors = [
   { name = "Peter Mads Pedersen", email = "s214236@dtu.dk" },
-  { name = "Enter name here (Gustav)", email = "enter email here" },
-  { name = "Enter name here (Andreas)", email = "enter email here" },
-  { name = "Enter name here (Marte)", email = "enter email here" },
 ]
 readme = "README.md"
 requires-python = ">=3.13"
