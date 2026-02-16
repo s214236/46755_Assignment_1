@@ -4,7 +4,7 @@ import gurobipy as gp
 from gurobipy import GRB
 
 
-def main():
+def main() -> None:
     """Main code for step 1."""
     pass
 
