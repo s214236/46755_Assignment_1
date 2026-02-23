@@ -22,22 +22,22 @@ class Generation:
     def get_single_period_generation(self) -> dict:
         """Get single period generation data."""
         self.generation_data = {
-            "gen_1": {"type": "conv", "node": "1", "capacity": 106.4, "cost": 13.32},
-            "gen_2": {"type": "conv", "node": "2", "capacity": 106.4, "cost": 13.32},
-            "gen_3": {"type": "conv", "node": "7", "capacity": 245, "cost": 20.7},
-            "gen_4": {"type": "conv", "node": "13", "capacity": 413.7, "cost": 20.93},
-            "gen_5": {"type": "conv", "node": "15", "capacity": 42, "cost": 26.11},
-            "gen_6": {"type": "conv", "node": "15", "capacity": 108.5, "cost": 10.52},
-            "gen_7": {"type": "conv", "node": "16", "capacity": 108.5, "cost": 10.52},
-            "gen_8": {"type": "conv", "node": "18", "capacity": 280, "cost": 6.02},
-            "gen_9": {"type": "conv", "node": "21", "capacity": 280, "cost": 5.47},
-            "gen_10": {"type": "conv", "node": "22", "capacity": 210, "cost": 7},
-            "gen_11": {"type": "conv", "node": "23", "capacity": 72, "cost": 10.52},
-            "gen_12": {"type": "conv", "node": "23", "capacity": 245, "cost": 10.89},
-            "gen_13": {"type": "wind", "node": "3", "capacity": 120.54, "cost": 0},
-            "gen_14": {"type": "wind", "node": "5", "capacity": 115.52, "cost": 0},
-            "gen_15": {"type": "wind", "node": "16", "capacity": 53.34, "cost": 0},
-            "gen_16": {"type": "wind", "node": "21", "capacity": 38.16, "cost": 0},
+            "G1": {"type": "conv", "node": "1", "capacity": 106.4, "cost": 13.32},
+            "G2": {"type": "conv", "node": "2", "capacity": 106.4, "cost": 13.32},
+            "G3": {"type": "conv", "node": "7", "capacity": 245, "cost": 20.7},
+            "G4": {"type": "conv", "node": "13", "capacity": 413.7, "cost": 20.93},
+            "G5": {"type": "conv", "node": "15", "capacity": 42, "cost": 26.11},
+            "G6": {"type": "conv", "node": "15", "capacity": 108.5, "cost": 10.52},
+            "G7": {"type": "conv", "node": "16", "capacity": 108.5, "cost": 10.52},
+            "G8": {"type": "conv", "node": "18", "capacity": 280, "cost": 6.02},
+            "G9": {"type": "conv", "node": "21", "capacity": 280, "cost": 5.47},
+            "G10": {"type": "conv", "node": "22", "capacity": 210, "cost": 7},
+            "G11": {"type": "conv", "node": "23", "capacity": 72, "cost": 10.52},
+            "G12": {"type": "conv", "node": "23", "capacity": 245, "cost": 10.89},
+            "G13": {"type": "wind", "node": "3", "capacity": 120.54, "cost": 0},
+            "G14": {"type": "wind", "node": "5", "capacity": 115.52, "cost": 0},
+            "G15": {"type": "wind", "node": "16", "capacity": 53.34, "cost": 0},
+            "G16": {"type": "wind", "node": "21", "capacity": 38.16, "cost": 0},
         }
         return self.generation_data
 
@@ -45,86 +45,87 @@ class Generation:
         """Get multi period generation data.
 
         Source: Renewables.ninja.
-            gen_13: Ringkøbing, Denmark.
-            gen_14: København, Denmark.
-            gen_15: Berlin, Germany.
-            gen_16: Paris, France.
+            jan. 1st. 2019
+            G13: Ringkøbing, Denmark.
+            G14: København, Denmark.
+            G15: Berlin, Germany.
+            G16: Paris, France.
 
         """
         self.generation_data = {
-            "gen_1": {
+            "G1": {
                 "type": "conv",
                 "node": "1",
                 "capacity": [106.4] * 24,
                 "cost": [13.32] * 24,
             },
-            "gen_2": {
+            "G2": {
                 "type": "conv",
                 "node": "2",
                 "capacity": [106.4] * 24,
                 "cost": [13.32] * 24,
             },
-            "gen_3": {
+            "G3": {
                 "type": "conv",
                 "node": "7",
                 "capacity": [245] * 24,
                 "cost": [20.7] * 24,
             },
-            "gen_4": {
+            "G4": {
                 "type": "conv",
                 "node": "13",
                 "capacity": [413.7] * 24,
                 "cost": [20.93] * 24,
             },
-            "gen_5": {
+            "G5": {
                 "type": "conv",
                 "node": "15",
                 "capacity": [42] * 24,
                 "cost": [26.11] * 24,
             },
-            "gen_6": {
+            "G6": {
                 "type": "conv",
                 "node": "15",
                 "capacity": [108.5] * 24,
                 "cost": [10.52] * 24,
             },
-            "gen_7": {
+            "G7": {
                 "type": "conv",
                 "node": "16",
                 "capacity": [108.5] * 24,
                 "cost": [10.52] * 24,
             },
-            "gen_8": {
+            "G8": {
                 "type": "conv",
                 "node": "18",
                 "capacity": [280] * 24,
                 "cost": [6.02] * 24,
             },
-            "gen_9": {
+            "G9": {
                 "type": "conv",
                 "node": "21",
                 "capacity": [280] * 24,
                 "cost": [5.47] * 24,
             },
-            "gen_10": {
+            "G10": {
                 "type": "conv",
                 "node": "22",
                 "capacity": [210] * 24,
                 "cost": [7] * 24,
             },
-            "gen_11": {
+            "G11": {
                 "type": "conv",
                 "node": "23",
                 "capacity": [72] * 24,
                 "cost": [10.52] * 24,
             },
-            "gen_12": {
+            "G12": {
                 "type": "conv",
                 "node": "23",
                 "capacity": [245] * 24,
                 "cost": [10.89] * 24,
             },
-            "gen_13": {
+            "G13": {
                 "type": "wind",
                 "node": "3",
                 "capacity": [
@@ -155,7 +156,7 @@ class Generation:
                 ],
                 "cost": [0] * 24,
             },
-            "gen_14": {
+            "G14": {
                 "type": "wind",
                 "node": "5",
                 "capacity": [
@@ -186,7 +187,7 @@ class Generation:
                 ],
                 "cost": [0] * 24,
             },
-            "gen_15": {
+            "G15": {
                 "type": "wind",
                 "node": "16",
                 "capacity": [
@@ -217,7 +218,7 @@ class Generation:
                 ],
                 "cost": [0] * 24,
             },
-            "gen_16": {
+            "G16": {
                 "type": "wind",
                 "node": "21",
                 "capacity": [

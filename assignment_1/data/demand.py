@@ -24,23 +24,23 @@ class Demand:
     def get_single_period_demand(self) -> dict:
         """Get single period demand data."""
         self.demand_data = {
-            "demand_1": {"type": "demand", "node": "1", "capacity": 84, "cost": 100},
-            "demand_2": {"type": "demand", "node": "2", "capacity": 75, "cost": 100},
-            "demand_3": {"type": "demand", "node": "3", "capacity": 139, "cost": 100},
-            "demand_4": {"type": "demand", "node": "4", "capacity": 58, "cost": 100},
-            "demand_5": {"type": "demand", "node": "5", "capacity": 55, "cost": 100},
-            "demand_6": {"type": "demand", "node": "6", "capacity": 106, "cost": 100},
-            "demand_7": {"type": "demand", "node": "7", "capacity": 97, "cost": 100},
-            "demand_8": {"type": "demand", "node": "8", "capacity": 132, "cost": 100},
-            "demand_9": {"type": "demand", "node": "9", "capacity": 135, "cost": 100},
-            "demand_10": {"type": "demand", "node": "10", "capacity": 150, "cost": 100},
-            "demand_11": {"type": "demand", "node": "13", "capacity": 205, "cost": 100},
-            "demand_12": {"type": "demand", "node": "14", "capacity": 150, "cost": 100},
-            "demand_13": {"type": "demand", "node": "15", "capacity": 245, "cost": 100},
-            "demand_14": {"type": "demand", "node": "16", "capacity": 77, "cost": 100},
-            "demand_15": {"type": "demand", "node": "18", "capacity": 258, "cost": 100},
-            "demand_16": {"type": "demand", "node": "19", "capacity": 141, "cost": 100},
-            "demand_17": {"type": "demand", "node": "20", "capacity": 100, "cost": 100},
+            "D1": {"type": "demand", "node": "1", "capacity": 84, "cost": 30},
+            "D2": {"type": "demand", "node": "2", "capacity": 75, "cost": 28},
+            "D3": {"type": "demand", "node": "3", "capacity": 139, "cost": 26},
+            "D4": {"type": "demand", "node": "4", "capacity": 58, "cost": 24},
+            "D5": {"type": "demand", "node": "5", "capacity": 55, "cost": 23},
+            "D6": {"type": "demand", "node": "6", "capacity": 106, "cost": 22},
+            "D7": {"type": "demand", "node": "7", "capacity": 97, "cost": 21},
+            "D8": {"type": "demand", "node": "8", "capacity": 132, "cost": 20},
+            "D9": {"type": "demand", "node": "9", "capacity": 135, "cost": 19},
+            "D10": {"type": "demand", "node": "10", "capacity": 150, "cost": 18},
+            "D11": {"type": "demand", "node": "13", "capacity": 205, "cost": 17},
+            "D12": {"type": "demand", "node": "14", "capacity": 150, "cost": 16},
+            "D13": {"type": "demand", "node": "15", "capacity": 245, "cost": 15},
+            "D14": {"type": "demand", "node": "16", "capacity": 77, "cost": 14},
+            "D15": {"type": "demand", "node": "18", "capacity": 258, "cost": 13},
+            "D16": {"type": "demand", "node": "19", "capacity": 141, "cost": 12},
+            "D17": {"type": "demand", "node": "20", "capacity": 100, "cost": 11},
         }
         return self.demand_data
 
@@ -74,103 +74,103 @@ class Demand:
         ]
 
         self.demand_data = {
-            "demand_1": {
+            "D1": {
                 "type": "demand",
                 "node": "1",
                 "capacity": (0.038 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_2": {
+            "D2": {
                 "type": "demand",
                 "node": "2",
                 "capacity": (0.034 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_3": {
+            "D3": {
                 "type": "demand",
                 "node": "3",
                 "capacity": (0.063 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_4": {
+            "D4": {
                 "type": "demand",
                 "node": "4",
                 "capacity": (0.026 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_5": {
+            "D5": {
                 "type": "demand",
                 "node": "5",
                 "capacity": (0.025 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_6": {
+            "D6": {
                 "type": "demand",
                 "node": "6",
                 "capacity": (0.048 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_7": {
+            "D7": {
                 "type": "demand",
                 "node": "7",
                 "capacity": (0.044 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_8": {
+            "D8": {
                 "type": "demand",
                 "node": "8",
                 "capacity": (0.06 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_9": {
+            "D9": {
                 "type": "demand",
                 "node": "9",
                 "capacity": (0.061 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_10": {
+            "D10": {
                 "type": "demand",
                 "node": "10",
                 "capacity": (0.068 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_11": {
+            "D11": {
                 "type": "demand",
                 "node": "13",
                 "capacity": (0.093 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_12": {
+            "D12": {
                 "type": "demand",
                 "node": "14",
                 "capacity": (0.068 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_13": {
+            "D13": {
                 "type": "demand",
                 "node": "15",
                 "capacity": (0.111 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_14": {
+            "D14": {
                 "type": "demand",
                 "node": "16",
                 "capacity": (0.035 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_15": {
+            "D15": {
                 "type": "demand",
                 "node": "18",
                 "capacity": (0.117 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_16": {
+            "D16": {
                 "type": "demand",
                 "node": "19",
                 "capacity": (0.064 * np.array(Load_profile)).tolist(),
                 "cost": [100] * 24,
             },
-            "demand_17": {
+            "D17": {
                 "type": "demand",
                 "node": "20",
                 "capacity": (0.045 * np.array(Load_profile)).tolist(),
