@@ -8,7 +8,7 @@ Repo for assignment 1 for group 32
 
 ## TODO
 ### Peter
-
+1. Finish RESULTS for step_2
 
 ### Gustav
 
