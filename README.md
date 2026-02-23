@@ -11,13 +11,13 @@ Repo for assignment 1 for group 32
 
 
 ### Gustav
-1. Udfyld navn og email i pyproject.toml, commit herefter til din egen branch og merge til main efter.
+
 
 ### Andreas
-1. Udfyld navn og email i pyproject.toml, commit herefter til din egen branch og merge til main efter.
+
 
 ### Marte
-1. Udfyld navn og email i pyproject.toml, commit herefter til din egen branch og merge til main efter.
+
 
 ## Develop
 ### Development rules
