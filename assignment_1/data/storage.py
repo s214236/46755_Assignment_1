@@ -16,12 +16,12 @@ class Storage:
             "S1": {
                 "type": "storage",
                 "node": "TODO: add node",
-                "capacity": 200,
-                "charge_cap": 100,
-                "discharge_cap": 100,
-                "charge_eff": 0.9,
-                "discharge_eff": 0.9,
-                "initial_soc": 1,
+                "capacity": 500,
+                "charge_cap": 250,
+                "discharge_cap": 250,
+                "charge_eff": 0.95,
+                "discharge_eff": 0.95,
+                "initial_soc": 0.5,
             }
         }
         return self.storage_data

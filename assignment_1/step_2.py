@@ -10,21 +10,26 @@ from assignment_1.data.storage import Storage
 from assignment_1.utils.colors import demand_color, gen_color
 
 
-def main(plot: bool = True) -> None:
-    """Main code for step 2.
-
-    A multi-period, single-bidding-zone (copper-plate) market clearing model.
+def optimization_model(
+    gen_data: dict,
+    demand_data: dict,
+    storage_data: dict,
+    T: int,
+) -> tuple[gp.Model, dict, dict]:
+    """Create optimization model for step 2.
 
     Args:
-        plot (bool, optional): Whether to plot. Defaults to True.
+        gen_data (dict): Generation data.
+        demand_data (dict): Demand data.
+        storage_data (dict): Storage data.
+        T (int): Number of time periods.
+
+    Returns:
+        model (gp.Model): Gurobi optimization model.
+        var (dict): Dictionary of optimization variables.
+        constr (dict): Dictionary of optimization constraints.
 
     """
-    # %% Load data
-    gen_data = Generation(type="multi_period").generation_data
-    demand_data = Demand(type="multi_period").demand_data
-    storage_data = Storage().storage_data
-    T = 24
-
     # Checking if input data has correct time series length
     for demand, data in demand_data.items():
         assert len(data["capacity"]) == T, (
@@ -64,20 +69,21 @@ def main(plot: bool = True) -> None:
             )
 
         # Add Charge/Discharge variables for storage unit
-        var[f"charge_{t}"] = model.addVar(
-            lb=0,
-            ub=storage_data["S1"]["charge_cap"],
-        )
-        var[f"discharge_{t}"] = model.addVar(
-            lb=0,
-            ub=storage_data["S1"]["discharge_cap"],
-        )
+        for storage, data in storage_data.items():
+            var[f"{storage}_charge_{t}"] = model.addVar(
+                lb=0,
+                ub=data["charge_cap"],
+            )
+            var[f"{storage}_discharge_{t}"] = model.addVar(
+                lb=0,
+                ub=data["discharge_cap"],
+            )
 
-        # Add state of charge variable for storage unit
-        var[f"soc_{t}"] = model.addVar(
-            lb=0,
-            ub=storage_data["S1"]["capacity"],
-        )
+            # Add state of charge variable for storage unit
+            var[f"{storage}_soc_{t}"] = model.addVar(
+                lb=0,
+                ub=data["capacity"],
+            )
 
     model.update()
 
@@ -104,29 +110,52 @@ def main(plot: bool = True) -> None:
         # Add power balance constraint (supply = demand)
         constr[f"power_balance_{t}"] = model.addLConstr(
             gp.quicksum(var[f"{demand}_{t}"] for demand in demand_data)
-            + var[f"charge_{t}"]
+            + gp.quicksum(var[f"{storage}_charge_{t}"] for storage in storage_data)
             == gp.quicksum(var[f"{gen}_{t}"] for gen in gen_data)
-            + var[f"discharge_{t}"],
+            + gp.quicksum(var[f"{storage}_discharge_{t}"] for storage in storage_data),
         )
 
         # Add storage state of charge constraints
-        if t == 0:
-            constr[f"soc_balance_{t}"] = model.addLConstr(
-                var[f"soc_{t}"]
-                == storage_data["S1"]["initial_soc"] * storage_data["S1"]["capacity"]
-                + storage_data["S1"]["charge_eff"] * var[f"charge_{t}"]
-                - (1 / storage_data["S1"]["discharge_eff"]) * var[f"discharge_{t}"],
-            )
-        else:
-            constr[f"soc_balance_{t}"] = model.addLConstr(
-                var[f"soc_{t}"]
-                == var[f"soc_{t - 1}"]
-                + storage_data["S1"]["charge_eff"] * var[f"charge_{t}"]
-                - (1 / storage_data["S1"]["discharge_eff"]) * var[f"discharge_{t}"],
+        for storage in storage_data:
+            constr[f"soc_balance_{storage}_{t}"] = model.addLConstr(
+                var[f"{storage}_soc_{t}"]
+                == (
+                    var[f"{storage}_soc_{t - 1}"]
+                    if t > 0
+                    else storage_data[storage]["initial_soc"]
+                    * storage_data[storage]["capacity"]
+                )
+                + storage_data[storage]["charge_eff"] * var[f"{storage}_charge_{t}"]
+                - (1 / storage_data[storage]["discharge_eff"])
+                * var[f"{storage}_discharge_{t}"],
             )
 
     # Optimize model
     model.optimize()
+
+    return model, var, constr
+
+
+def main(plot: bool = True) -> None:
+    """Main code for step 2.
+
+    A multi-period, single-bidding-zone (copper-plate) market clearing model.
+
+    Args:
+        plot (bool, optional): Whether to plot. Defaults to True.
+
+    """
+    # %% Load data
+    gen_data = Generation(type="multi_period").generation_data
+    demand_data = Demand(type="multi_period").demand_data
+    storage_data = Storage().storage_data
+    T = 24
+
+    # %% Optimization model
+    model, var, constr = optimization_model(gen_data, demand_data, storage_data, T)
+    model_without_storage, var_without_storage, constr_without_storage = (
+        optimization_model(gen_data, demand_data, {}, T)
+    )
 
     # %% Evaluate results
     if model.status == GRB.OPTIMAL:
@@ -134,6 +163,64 @@ def main(plot: bool = True) -> None:
         spot_price = [round(constr[f"power_balance_{t}"].Pi, 2) for t in range(T)]
         print(f"Market clearing price: {spot_price} €/MWh")
         print(f"Optimal social welfare: {model.ObjVal:.2f} €")
+        total_cost = sum(
+            data["cost"][t] * var[f"{gen}_{t}"].X
+            for gen, data in gen_data.items()
+            for t in range(T)
+        )
+        print(f"Total generation cost: {total_cost:.2f} €")
+
+        print("Generation:")
+        for gen, data in gen_data.items():
+            profit = sum(
+                (spot_price[t] - data["cost"][t]) * var[f"{gen}_{t}"].X
+                for t in range(T)
+            )
+            print(f"  {gen} total profit: {profit:.2f} €")
+
+        print("Demand:")
+        for demand, data in demand_data.items():
+            utility = sum(
+                (data["cost"][t] - spot_price[t]) * var[f"{demand}_{t}"].X
+                for t in range(T)
+            )
+            print(f"  {demand}: total utility: {utility:.2f} €")
+
+        print("Storage:")
+        for storage in storage_data:
+            profit = sum(
+                spot_price[t]
+                * (var[f"{storage}_discharge_{t}"].X - var[f"{storage}_charge_{t}"].X)
+                for t in range(T)
+            )
+            print(f"  {storage} total profit: {profit:.2f} €")
+
+        spot_price_without_storage = [
+            round(constr_without_storage[f"power_balance_{t}"].Pi, 2) for t in range(T)
+        ]
+
+        if plot:
+            plt.figure(figsize=(10, 6))
+            plt.step(
+                range(T + 1),
+                spot_price + [spot_price[-1]],
+                where="post",
+                label="Market Clearing Price",
+                color="black",
+            )
+            plt.step(
+                range(T + 1),
+                spot_price_without_storage + [spot_price_without_storage[-1]],
+                where="post",
+                label="Market Clearing Price (without storage)",
+                color="red",
+            )
+            plt.xlabel("Time (hours)")
+            plt.xticks(range(0, T + 1, 3))
+            plt.ylabel("Price (€/MWh)")
+            plt.legend()
+            plt.grid(True)
+            plt.show()
 
     else:
         print("No optimal solution found.")
