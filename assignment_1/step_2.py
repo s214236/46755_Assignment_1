@@ -35,19 +35,23 @@ def optimization_model(
     """
     # Checking if input data has correct time series length
     for demand, data in demand_data.items():
-        assert len(data["capacity"]) == T, (
-            f"Demand {demand} has incorrect time series length."
-        )
-        assert len(data["cost"]) == T, (
-            f"Demand {demand} has incorrect time series length."
-        )
+        if len(data["capacity"]) != T:
+            raise ValueError(
+                f"Demand {demand} has incorrect time series length."
+            )
+        if len(data["cost"]) != T:
+            raise ValueError(
+                f"Demand {demand} has incorrect time series length."
+            )
     for gen, data in gen_data.items():
-        assert len(data["capacity"]) == T, (
-            f"Generation {gen} has incorrect time series length."
-        )
-        assert len(data["cost"]) == T, (
-            f"Generation {gen} has incorrect time series length."
-        )
+        if len(data["capacity"]) != T:
+            raise ValueError(
+                f"Generation {gen} has incorrect time series length."
+            )
+        if len(data["cost"]) != T:
+            raise ValueError(
+                f"Generation {gen} has incorrect time series length."
+            )
 
     # %% Optimization model
     # Create a new model
