@@ -72,109 +72,169 @@ class Demand:
             1934.865,
             1669.815,
         ]
+        bid_max = 1.5
+        bid_min = 0.5
+        bid_profile = [1.0] * len(Load_profile)
+        for i in range(len(bid_profile)):
+            bid_profile[i] = bid_min + (bid_max - bid_min) * (
+                Load_profile[i] - min(Load_profile)
+            ) / (max(Load_profile) - min(Load_profile))
+
+        single_period_demand = self.get_single_period_demand()
 
         self.demand_data = {
             "D1": {
                 "type": "demand",
                 "node": "1",
                 "capacity": (0.038 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D1"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D2": {
                 "type": "demand",
                 "node": "2",
                 "capacity": (0.034 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D2"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D3": {
                 "type": "demand",
                 "node": "3",
                 "capacity": (0.063 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D3"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D4": {
                 "type": "demand",
                 "node": "4",
                 "capacity": (0.026 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D4"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D5": {
                 "type": "demand",
                 "node": "5",
                 "capacity": (0.025 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D5"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D6": {
                 "type": "demand",
                 "node": "6",
                 "capacity": (0.048 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D6"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D7": {
                 "type": "demand",
                 "node": "7",
                 "capacity": (0.044 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D7"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D8": {
                 "type": "demand",
                 "node": "8",
                 "capacity": (0.06 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D8"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D9": {
                 "type": "demand",
                 "node": "9",
                 "capacity": (0.061 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D9"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D10": {
                 "type": "demand",
                 "node": "10",
                 "capacity": (0.068 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D10"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D11": {
                 "type": "demand",
                 "node": "13",
                 "capacity": (0.093 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D11"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D12": {
                 "type": "demand",
                 "node": "14",
                 "capacity": (0.068 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D12"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D13": {
                 "type": "demand",
                 "node": "15",
                 "capacity": (0.111 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D13"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D14": {
                 "type": "demand",
                 "node": "16",
                 "capacity": (0.035 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D14"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D15": {
                 "type": "demand",
                 "node": "18",
                 "capacity": (0.117 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D15"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D16": {
                 "type": "demand",
                 "node": "19",
                 "capacity": (0.064 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D16"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
             "D17": {
                 "type": "demand",
                 "node": "20",
                 "capacity": (0.045 * np.array(Load_profile)).tolist(),
-                "cost": [100] * 24,
+                "cost": [
+                    bid_profile[i] * single_period_demand["D17"]["cost"]
+                    for i in range(len(bid_profile))
+                ],
             },
         }
         return self.demand_data
@@ -182,4 +242,4 @@ class Demand:
 
 if __name__ == "__main__":
     demand = Demand(type="multi_period")
-    print(demand.demand_data)
+    print(demand.demand_data["D10"])
