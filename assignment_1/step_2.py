@@ -1,7 +1,10 @@
 """Assignment 1, Step 2: Copper-Plate, Multiple Hours."""
 
+import copy
+
 import gurobipy as gp
 import matplotlib.pyplot as plt
+import numpy as np
 from gurobipy import GRB
 
 from assignment_1.data.demand import Demand
@@ -216,14 +219,74 @@ def main(plot: bool = True) -> None:
                 color="red",
             )
             plt.xlabel("Time (hours)")
-            plt.xticks(range(0, T + 1, 3))
+            plt.xticks(np.arange(0, T + 1, 3))
             plt.ylabel("Price (€/MWh)")
+            plt.title("Market Clearing Price")
             plt.legend()
             plt.grid(True)
             plt.show()
 
     else:
         print("No optimal solution found.")
+
+    # %% Sensitivity analysis on storage parameters
+    def storage_param_sensitivity_analysis(
+        storage_data: dict, factors: list[float], param: str
+    ) -> list[tuple[float, float]]:
+        social_welfare_results = []
+        for factor in factors:
+            # Update storage data with sensitivity factor
+            storage_data_sensitivity = copy.deepcopy(storage_data)
+            for storage in storage_data_sensitivity:
+                match param:
+                    case "capacity":
+                        storage_data_sensitivity[storage]["capacity"] *= factor
+                    case "power":
+                        storage_data_sensitivity[storage]["charge_cap"] *= factor
+                        storage_data_sensitivity[storage]["discharge_cap"] *= factor
+                    case _:
+                        raise ValueError("Invalid parameter for sensitivity analysis.")
+
+            model_sensitivity, var_sensitivity, constr_sensitivity = optimization_model(
+                gen_data, demand_data, storage_data_sensitivity, T
+            )
+
+            if model_sensitivity.status == GRB.OPTIMAL:
+                social_welfare_results.append((factor, model_sensitivity.ObjVal))
+            else:
+                raise ValueError(
+                    f"No optimal solution found for sensitivity factor {factor} for parameter {param}."
+                )
+
+        return social_welfare_results
+
+    factors = np.arange(0.5, 1.6, 0.1).tolist()
+    results_capacity = storage_param_sensitivity_analysis(
+        storage_data, factors, "capacity"
+    )
+    results_charge_cap = storage_param_sensitivity_analysis(
+        storage_data, factors, "power"
+    )
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(
+        [factor for factor, _ in results_capacity],
+        [welfare for _, welfare in results_capacity],
+        label="Storage Capacity",
+        marker="o",
+    )
+    plt.plot(
+        [factor for factor, _ in results_charge_cap],
+        [welfare for _, welfare in results_charge_cap],
+        label="Storage Power",
+        marker="s",
+    )
+    plt.xlabel("Sensitivity Factor")
+    plt.ylabel("Social Welfare (€)")
+    plt.title("Sensitivity Analysis of Storage Parameters")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 
 if __name__ == "__main__":
