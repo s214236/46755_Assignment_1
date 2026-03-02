@@ -251,7 +251,7 @@ def main(plot: bool = True) -> None:
                     case _:
                         raise ValueError("Invalid parameter for sensitivity analysis.")
 
-            model_sensitivity, var_sensitivity, constr_sensitivity = optimization_model(
+            model_sensitivity, _, _ = optimization_model(
                 gen_data, demand_data, storage_data_sensitivity, T
             )
 
