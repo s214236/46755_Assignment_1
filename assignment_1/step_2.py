@@ -265,33 +265,34 @@ def main(plot: bool = True) -> None:
 
         return social_welfare_results
 
-    factors = np.arange(0.5, 1.6, 0.1).tolist()
-    results_capacity = storage_param_sensitivity_analysis(
-        storage_data, factors, "capacity"
-    )
-    results_charge_cap = storage_param_sensitivity_analysis(
-        storage_data, factors, "power"
-    )
+    if plot:
+        factors = np.arange(0.5, 1.6, 0.1).tolist()
+        results_capacity = storage_param_sensitivity_analysis(
+            storage_data, factors, "capacity"
+        )
+        results_charge_cap = storage_param_sensitivity_analysis(
+            storage_data, factors, "power"
+        )
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(
-        [factor for factor, _ in results_capacity],
-        [welfare for _, welfare in results_capacity],
-        label="Storage Capacity",
-        marker="o",
-    )
-    plt.plot(
-        [factor for factor, _ in results_charge_cap],
-        [welfare for _, welfare in results_charge_cap],
-        label="Storage Power",
-        marker="s",
-    )
-    plt.xlabel("Sensitivity Factor")
-    plt.ylabel("Social Welfare (€)")
-    plt.title("Sensitivity Analysis of Storage Parameters")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+        plt.figure(figsize=(10, 6))
+        plt.plot(
+            [factor for factor, _ in results_capacity],
+            [welfare for _, welfare in results_capacity],
+            label="Storage Capacity",
+            marker="o",
+        )
+        plt.plot(
+            [factor for factor, _ in results_charge_cap],
+            [welfare for _, welfare in results_charge_cap],
+            label="Storage Power",
+            marker="s",
+        )
+        plt.xlabel("Sensitivity Factor")
+        plt.ylabel("Social Welfare (€)")
+        plt.title("Sensitivity Analysis of Storage Parameters")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
 
 
 if __name__ == "__main__":
