@@ -232,6 +232,7 @@ def main(plot: bool = True) -> None:
 
     else:
         print("No optimal solution found.")
+        return
 
     # %% Sensitivity analysis on storage parameters
     def storage_param_sensitivity_analysis(
