@@ -160,8 +160,8 @@ def main(plot: bool = True) -> None:
 
     # %% Optimization model
     model, var, constr = optimization_model(gen_data, demand_data, storage_data, T)
-    model_without_storage, var_without_storage, constr_without_storage = (
-        optimization_model(gen_data, demand_data, {}, T)
+    _, _, constr_without_storage = optimization_model(
+        gen_data, demand_data, {}, T
     )
 
     # %% Evaluate results
