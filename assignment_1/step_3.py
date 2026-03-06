@@ -30,6 +30,14 @@ def optimization_model(
     var = {}
     constr = {}
 
+    # Adding missing nodes in the network data
+    nodes = [gen["node"] for gen in gen_data.values()] + [
+        demand["node"] for demand in demand_data.values()
+    ]
+    for node in nodes:
+        if node not in network_data["nodes"]:
+            network_data["nodes"][node] = {"bz": f"no_bz_node_{node}"}
+
     # Add demand variables
     for demand, data in demand_data.items():
         var[demand] = model.addVar(
@@ -61,6 +69,10 @@ def optimization_model(
         GRB.MAXIMIZE,
     )
 
+    # Add reference bus constraint (set voltage angle of one node to 0)
+    ref_node = list(network_data["nodes"].keys())[0]
+    constr["ref_node"] = model.addLConstr(var[f"theta_{ref_node}"] == 0)
+
     # Add power balance constraint
     for node in network_data["nodes"]:
         constr[f"power_balance_{node}"] = model.addLConstr(
@@ -69,19 +81,20 @@ def optimization_model(
                 for demand in demand_data
                 if demand_data[demand]["node"] == node
             )
-            - gp.quicksum(var[gen] for gen in gen_data if gen_data[gen]["node"] == node)
             + gp.quicksum(
                 (var[f"theta_{line_data['from']}"] - var[f"theta_{line_data['to']}"])
                 / line_data["reactance"]
+                * (1 if line_data["from"] == node else -1)
                 for line_data in network_data["lines"].values()
                 if line_data["from"] == node or line_data["to"] == node
             )
+            - gp.quicksum(var[gen] for gen in gen_data if gen_data[gen]["node"] == node)
             == 0,
         )
 
     # Add line flow constraints
     for line_name, line_data in network_data["lines"].items():
-        constr[f"line_flow_{line_name}"] = model.addLConstr(
+        constr[f"line_flow_{line_name}_pos"] = model.addLConstr(
             (var[f"theta_{line_data['from']}"] - var[f"theta_{line_data['to']}"])
             / line_data["reactance"]
             <= line_data["capacity"]
@@ -109,7 +122,7 @@ def main(plot: bool = True) -> None:
     # %% Load data
     gen_data = Generation(type="single_period").generation_data
     demand_data = Demand(type="single_period").demand_data
-    network_data = NetworkData().network_data
+    network_data = NetworkData(type="24_bus").network_data
 
     model, var, constr = optimization_model(gen_data, demand_data, network_data)
 
@@ -119,3 +132,26 @@ def main(plot: bool = True) -> None:
             node: constr[f"power_balance_{node}"].Pi for node in network_data["nodes"]
         }
         print("Market clearing prices: ", market_clearing_prices)
+
+        for gen in gen_data:
+            print(f"Generation {gen}: {var[gen].X} MW")
+
+        for demand in demand_data:
+            print(f"Demand {demand}: {var[demand].X} MW")
+
+        print("Line flows:")
+        for line_name, line_data in network_data["lines"].items():
+            flow = (
+                var[f"theta_{line_data['from']}"].X - var[f"theta_{line_data['to']}"].X
+            ) / line_data["reactance"]
+            print(
+                f"  {line_name}: {line_data['from']} -> {line_data['to']} : {flow} MW"
+            )
+
+    else:
+        print("No optimal solution found.")
+
+
+if __name__ == "__main__":
+    main()
+    print("Done!")
