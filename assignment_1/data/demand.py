@@ -18,8 +18,20 @@ class Demand:
         self.type = type
         if self.type == "single_period":
             self.demand_data = self.get_single_period_demand()
-        else:
+        elif self.type == "multi_period":
             self.demand_data = self.get_multi_period_demand()
+        elif self.type == "single_period_test":
+            self.demand_data = self.get_single_period_test_demand()
+        else:
+            raise ValueError("Undefined demand data")
+
+    def get_single_period_test_demand(self) -> dict:
+        """Get single period test demand data."""
+        self.demand_data = {
+            "D1": {"type": "demand", "node": "1", "capacity": 75, "cost": 30},
+            "D2": {"type": "demand", "node": "2", "capacity": 75, "cost": 30},
+        }
+        return self.demand_data
 
     def get_single_period_demand(self) -> dict:
         """Get single period demand data."""

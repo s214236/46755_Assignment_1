@@ -6,18 +6,32 @@ from typing import Literal
 class Generation:
     """Generation data."""
 
-    def __init__(self, type: str | Literal["single_period", "multi_period"]) -> None:
+    def __init__(
+        self, type: str | Literal["single_period", "multi_period", "single_period_test"]
+    ) -> None:
         """Initialize generation data.
 
         Args:
-            type ("single period" | "multi period"): Type of generation data to generate.
+            type ("single period" | "multi period" | "single period test"): Type of generation data to generate.
 
         """
         self.type = type
         if self.type == "single_period":
             self.generation_data = self.get_single_period_generation()
-        else:
+        elif self.type == "multi_period":
             self.generation_data = self.get_multi_period_generation()
+        elif self.type == "single_period_test":
+            self.generation_data = self.get_single_period_test_generation()
+        else:
+            raise ValueError("Undefined generation data")
+
+    def get_single_period_test_generation(self) -> dict:
+        """Get single period test generation data."""
+        self.generation_data = {
+            "G1": {"type": "conv", "node": "1", "capacity": 100, "cost": 10},
+            "G2": {"type": "conv", "node": "2", "capacity": 100, "cost": 20},
+        }
+        return self.generation_data
 
     def get_single_period_generation(self) -> dict:
         """Get single period generation data."""
