@@ -142,6 +142,44 @@ def optimization_model(
 
     return model, var, constr
 
+def print_merit_order(
+        gen_data: dict,
+        var: dict,
+        spot_price: list,
+        T: int) -> None:
+    """Print merit order and marginal generator for each hour."""
+    print("\nMERIT ORDER BY HOUR")
+
+    for t in range(T):
+        print(f"\nHour {t} | Market price: {spot_price[t]} €/MWh")
+
+        # Collect generator info
+        generators = []
+        for gen, data in gen_data.items():
+            output = var[f"{gen}_{t}"].X
+            capacity = data["capacity"][t]
+            cost = data["cost"][t]
+
+            generators.append((gen, cost, output, capacity))
+
+        # Sort by offer price (merit order)
+        generators.sort(key=lambda x: x[1])
+
+        # Print merit order
+        for gen, cost, output, capacity in generators:
+            status = ""
+
+            if output > 1e-5 and output < capacity - 1e-5:
+                status = " <-- MARGINAL"
+            elif output >= capacity - 1e-5:
+                status = " (at capacity)"
+
+            print(
+                f"{gen:15s} | offer: {cost:6.2f} €/MWh | "
+                f"dispatch: {output:6.2f}/{capacity:6.2f} MW{status}"
+            )
+
+
 
 def main(plot: bool = True) -> None:
     """Main code for step 2.
@@ -170,6 +208,7 @@ def main(plot: bool = True) -> None:
         print("\nRESULTS:")
         spot_price = [round(constr[f"power_balance_{t}"].Pi, 2) for t in range(T)]
         print(f"Market clearing price: {spot_price} €/MWh")
+        print_merit_order(gen_data, var, spot_price, T)
         print(f"Optimal social welfare: {model.ObjVal:.2f} €")
         total_cost = sum(
             data["cost"][t] * var[f"{gen}_{t}"].X
@@ -206,6 +245,7 @@ def main(plot: bool = True) -> None:
         spot_price_without_storage = [
             round(constr_without_storage[f"power_balance_{t}"].Pi, 2) for t in range(T)
         ]
+
 
         if plot:
             plt.figure(figsize=(10, 6))
@@ -298,3 +338,11 @@ def main(plot: bool = True) -> None:
 
 if __name__ == "__main__":
     main(plot=True)
+
+
+# %% Merit order
+
+
+
+
+
