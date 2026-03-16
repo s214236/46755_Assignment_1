@@ -25,8 +25,8 @@ def main(plot: bool = True) -> None:
 
     # %% Optimization model
     model = SinglePeriodNoNetwork(gen_data, demand_data)
-    model.create_model()
-    model.optimize()
+    model.create_dayahead_model()
+    model.optimize_dayahead_model()
 
     # %% Evaluate results
     print("\nRESULTS:")

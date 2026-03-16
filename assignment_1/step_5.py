@@ -11,8 +11,8 @@ def main() -> None:
     demand_data = Demand("single_period").demand_data
 
     model = SinglePeriodNoNetwork(gen_data, demand_data)
-    model.create_model()
-    model.optimize()
+    model.create_dayahead_model()
+    model.optimize_dayahead_model()
     model.define_imbalance(
         gen_new_imbalance={
             "G6": 0,
