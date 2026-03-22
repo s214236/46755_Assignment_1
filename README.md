@@ -1,5 +1,5 @@
 # Assignment 1 - 46755 - Renewables in Electricity markets
-Repo for assignment 1 for group 32
+Repo for assignment 1 for group 32.
 Dependencies can be found in pyproject.toml
 
 ## Repo structure
