@@ -13,7 +13,7 @@ from assignment_1.data.storage import Storage
 from assignment_1.utils.colors import demand_color, gen_color
 
 
-def optimization_model(
+def multi_period_optimization_model(
     gen_data: dict,
     demand_data: dict,
     storage_data: dict,
@@ -36,22 +36,14 @@ def optimization_model(
     # Checking if input data has correct time series length
     for demand, data in demand_data.items():
         if len(data["capacity"]) != T:
-            raise ValueError(
-                f"Demand {demand} has incorrect time series length."
-            )
+            raise ValueError(f"Demand {demand} has incorrect time series length.")
         if len(data["cost"]) != T:
-            raise ValueError(
-                f"Demand {demand} has incorrect time series length."
-            )
+            raise ValueError(f"Demand {demand} has incorrect time series length.")
     for gen, data in gen_data.items():
         if len(data["capacity"]) != T:
-            raise ValueError(
-                f"Generation {gen} has incorrect time series length."
-            )
+            raise ValueError(f"Generation {gen} has incorrect time series length.")
         if len(data["cost"]) != T:
-            raise ValueError(
-                f"Generation {gen} has incorrect time series length."
-            )
+            raise ValueError(f"Generation {gen} has incorrect time series length.")
 
     # %% Optimization model
     # Create a new model
@@ -142,11 +134,8 @@ def optimization_model(
 
     return model, var, constr
 
-def print_merit_order(
-        gen_data: dict,
-        var: dict,
-        spot_price: list,
-        T: int) -> None:
+
+def print_merit_order(gen_data: dict, var: dict, spot_price: list, T: int) -> None:
     """Print merit order and marginal generator for each hour."""
     print("\nMERIT ORDER BY HOUR")
 
@@ -180,7 +169,6 @@ def print_merit_order(
             )
 
 
-
 def main(plot: bool = True) -> None:
     """Main code for step 2.
 
@@ -197,10 +185,12 @@ def main(plot: bool = True) -> None:
     T = 24
 
     # %% Optimization model
-    model, var, constr = optimization_model(gen_data, demand_data, storage_data, T)
-    
-    model_without_storage, _, constr_without_storage = optimization_model(
-    gen_data, demand_data, {}, T
+    model, var, constr = multi_period_optimization_model(
+        gen_data, demand_data, storage_data, T
+    )
+
+    model_without_storage, var_without_storage, constr_without_storage = (
+        multi_period_optimization_model(gen_data, demand_data, {}, T)
     )
 
     # %% Evaluate results
@@ -245,7 +235,6 @@ def main(plot: bool = True) -> None:
         spot_price_without_storage = [
             round(constr_without_storage[f"power_balance_{t}"].Pi, 2) for t in range(T)
         ]
-
 
         if plot:
             plt.figure(figsize=(10, 6))
@@ -293,7 +282,7 @@ def main(plot: bool = True) -> None:
                     case _:
                         raise ValueError("Invalid parameter for sensitivity analysis.")
 
-            model_sensitivity, _, _ = optimization_model(
+            model_sensitivity, _, _ = multi_period_optimization_model(
                 gen_data, demand_data, storage_data_sensitivity, T
             )
 
@@ -338,11 +327,3 @@ def main(plot: bool = True) -> None:
 
 if __name__ == "__main__":
     main(plot=True)
-
-
-# %% Merit order
-
-
-
-
-
